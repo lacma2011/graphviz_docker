@@ -1,4 +1,4 @@
-# First build the image. Run from rails root folder:
+# First build the image. Run from root folder:
 #
 #   ./docker/build_graphviz.sh
 #
