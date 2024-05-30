@@ -1,0 +1,34 @@
+# First build the image. Run from rails root folder:
+#
+#   ./docker/build_graphviz.sh
+#
+# Run commands ex. "ls" if entrypoint is "/bin/bash":
+#   docker-compose run --rm graphviz -c ls
+#
+# Open .dot file if entrypoint is "xdot":
+#   docker-compose run --rm graphviz example.dot
+
+
+version: '3.8'
+services:
+  graphviz:
+    entrypoint: ["xdot"]  # OPEN A .dot FILE WITH:   docker-compose run --rm graphviz example.dot
+    #entrypoint: ["/bin/bash"]
+    #command: ["-c", "tail -f /dev/null"]
+
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_graphviz
+    image: mygraphviz1
+    container_name: graphviz_gui
+    privileged: true
+    network_mode: "host"
+    working_dir: /home/graphviz_user
+    environment:
+      - DISPLAY=unix${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - NO_AT_BRIDGE=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+        - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - .:/home/graphviz_user
